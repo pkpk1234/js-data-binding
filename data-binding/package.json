@@ -1,0 +1,24 @@
+{
+  "name": "data-binding",
+  "version": "1.0.0",
+  "description": "demo for js data binding",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server",
+    "build": "webpack"
+  },
+  "author": "pkpk1234",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.1.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "html-webpack-plugin": "^2.30.1",
+    "jest": "^22.1.4",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}
