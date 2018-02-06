@@ -1,12 +1,12 @@
 //flow
 
 class Binder {
-    const propertyWatchFunctionMap:Map;
-    constructor Binder() {
-        propertyWatchFunctionMap = new Map();
+    
+    constructor() {
+        this.propertyWatchFunctionMap = new Map();
     }
     bindCallBack(propertyName:string,callBack:Function):void {
-        if(this.propertyWatchFunctionMap.hasKey(propertyName)) {
+        if(this.propertyWatchFunctionMap.has(propertyName)) {
             this.propertyWatchFunctionMap.push(callBack);
         } else {
             this.propertyWatchFunctionMap.set(propertyName,[callBack]);
@@ -15,12 +15,19 @@ class Binder {
     bindObject(obj:Object):void {
         for(const [propertyName, callBackArray] of this.propertyWatchFunctionMap) {
             Object.defineProperty(obj,propertyName,{
-                set:function() {
+                set:function(newValue) {
+                    obj.propertyName = newValue;
                     callBackArray.forEach(function(callBack) {
-                        callBack.call(null,{propertyName,});
+                        console.log(obj);
+                        callBack.apply(obj);
                     });
+                },
+                get:function() {
+                    return obj.propertyName;
                 }
             });
         }
     }
 }
+
+export default Binder;
