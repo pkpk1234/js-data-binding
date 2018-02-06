@@ -18,8 +18,6 @@ class Binder {
                 set:function(newValue) {
                     obj.propertyName = newValue;
                     callBackArray.forEach(function(callBack) {
-                        console.log(propertyName+"="+obj.propertyName);
-                        console.log(callBack);
                         callBack.apply(obj);
                     });
                 },
