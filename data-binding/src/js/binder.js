@@ -7,9 +7,9 @@ class Binder {
     }
     bindCallBack(propertyName:string,callBack:Function):void {
         if(this.propertyWatchFunctionMap.has(propertyName)) {
-            this.propertyWatchFunctionMap.push(callBack);
+            this.propertyWatchFunctionMap.get(propertyName).add(callBack);
         } else {
-            this.propertyWatchFunctionMap.set(propertyName,[callBack]);
+            this.propertyWatchFunctionMap.set(propertyName,new Set([callBack]));
         }
     }
     bindObject(obj:Object):void {
@@ -18,7 +18,8 @@ class Binder {
                 set:function(newValue) {
                     obj.propertyName = newValue;
                     callBackArray.forEach(function(callBack) {
-                        console.log(obj);
+                        console.log(propertyName+"="+obj.propertyName);
+                        console.log(callBack);
                         callBack.apply(obj);
                     });
                 },
