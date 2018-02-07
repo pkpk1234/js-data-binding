@@ -3,29 +3,37 @@
 class Binder {
     
     constructor() {
-        this.propertyWatchFunctionMap = new Map();
+        this.propertyCallbacksMap = new Map();
     }
-    bindCallBack(propertyName:string,callBack:Function):void {
-        if(this.propertyWatchFunctionMap.has(propertyName)) {
-            this.propertyWatchFunctionMap.get(propertyName).add(callBack);
+
+    subcribe(propertyName:string,callBack:Function):Binder {
+        if(this.propertyCallbacksMap.has(propertyName)) {
+            this.propertyCallbacksMap.get(propertyName).add(callBack);
         } else {
-            this.propertyWatchFunctionMap.set(propertyName,new Set([callBack]));
+            this.propertyCallbacksMap.set(propertyName,new Set([callBack]));
         }
+        return this;
     }
-    bindObject(obj:Object):void {
-        for(const [propertyName, callBackArray] of this.propertyWatchFunctionMap) {
-            Object.defineProperty(obj,propertyName,{
-                set:function(newValue) {
-                    obj.propertyName = newValue;
-                    callBackArray.forEach(function(callBack) {
-                        callBack.apply(obj);
-                    });
-                },
-                get:function() {
-                    return obj.propertyName;
+
+    bindObject(intiObject:Object):Object {
+        let propertyCallbacksMap = this.propertyCallbacksMap;
+        return new Proxy(intiObject,{
+            get: function(target,propertyName) {
+                return target[propertyName];
+            },
+            set: function(target,propertyName,newValue,receiver) {
+                if(target[propertyName] !== newValue) {
+                    target[propertyName] = newValue;
+                    if(propertyCallbacksMap.has(propertyName)) {
+                        let callBacks = propertyCallbacksMap.get(propertyName);
+                        callBacks.forEach(callBack => {
+                            callBack.call(undefined,target);
+                        });
+                    }
                 }
-            });
-        }
+                return true;
+            }
+        });
     }
 }
 
