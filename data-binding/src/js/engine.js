@@ -10,10 +10,11 @@ class Engine {
      * @param {*} template 
      */
     compile(template: string): Object {
+        debugger;
         let tokens = tokenizer.getTokens(template);
         let functionBody = tokens.join(' + ');
         return {
-            "render": new Function("context", " with(context) {return "+functionBody+" };")
+            "render": new Function("context", ' with(context) {return '+functionBody+' };')
         };
     };
 }
